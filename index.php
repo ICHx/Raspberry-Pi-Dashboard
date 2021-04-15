@@ -242,7 +242,9 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
     if ($auth) {
     ?>
       <div class="row pt-3">
-        <div class="col-sm-6 pt-1 pt-md-0">
+
+        <!-- Default: hardware
+          <div class="col-sm-6 pt-1 pt-md-0">
           <div class="card text-center border-info">
             <div class="card-body">
               <h5 class="card-title"><i class="bi bi-hdd-rack"></i>&nbsp;Hardware</h5>
@@ -252,7 +254,19 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
               <p class="card-text"><small class="text-muted">Updated <span><?php echo date("H:i:s"); ?> (at page load)</span></small></p>
             </div>
           </div>
+        </div> -->
+        <div class="col-sm-6 pt-1 pt-md-0">
+          <div class="card text-center border-info">
+            <div class="card-body">
+              <h5 class="card-title"><i class="bi bi-hdd-rack"></i>&nbsp;Services</h5>
+              <?php print "<pre>";
+              echo shell_exec("service --status-all");
+              print "</pre>"; ?>
+              <p class="card-text"><small class="text-muted">Updated <span><?php echo date("H:i:s"); ?> (at page load)</span></small></p>
+            </div>
+          </div>
         </div>
+
         <div class="col-sm-6 pt-1 pt-md-0">
           <div class="card text-center border-info">
             <div class="card-body">
@@ -315,7 +329,7 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
             <div class="card-header">Partitions / Storage</div>
             <div class="card-body">
               <?php print "<pre style='text-align: left!important;'>";
-              echo shell_exec("df -h");
+              echo shell_exec("df -h /home/sdcard");
               print "</pre>"; ?>
               <p class="card-text"><small class="text-muted">Updated <span><?php echo date("H:i:s"); ?> (at page load)</span></small></p>
             </div>
@@ -337,10 +351,10 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
       <div class="row pt-3">
         <div class="col-sm-6 pt-1 pt-md-0">
           <div class="card text-center border-info">
-            <div class="card-header">Hostnamectl</div>
+            <div class="card-header">Hostname</div>
             <div class="card-body">
               <?php print "<pre style='text-align: left!important;'>";
-              echo shell_exec("hostname -I");
+              echo shell_exec("hostname ");
               print "</pre>"; ?>
               <p class="card-text"><small class="text-muted">Updated <span><?php echo date("H:i:s"); ?> (at page load)</span></small></p>
             </div>
@@ -500,7 +514,7 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
                 </div>
                 <div class="form-row">
                   <div class="col-6">
-                    <input type="number" id="warn_loads_size" class="form-control" placeholder="default: 2" aria-describedby="critCpuLoadHelp" min="1" max="4" value="<?= $config->get("thresholds.warn_loads_size") ?>">
+                    <input type="number" id="warn_loads_size" class="form-control" placeholder="default: 2" aria-describedby="critCpuLoadHelp" min="1" max="8" value="<?= $config->get("thresholds.warn_loads_size") ?>">
                     <small id="critCpuLoadHelp" class="form-text text-muted">CPU workload (last min) - default: 2</small>
                   </div>
                 </div>
