@@ -7,6 +7,6 @@ Functional
 - Hostnamectl -> IP, my embedded environment is systemd-less
 
 Asethetical
-- MD Toast are not justified not centred, to make plenty use of limited space.
+- MD Toast are now justified not centred, to make plenty use of limited space.
 
 - Storage is only showing /data, to suit my own need
