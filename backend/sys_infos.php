@@ -45,7 +45,7 @@ if ($s > 0) {
 exec("cat /sys/class/thermal/thermal_zone0/temp",$cputemp);
 $cputemp = $cputemp[0] / 1000;
 // CPU frequency
-exec("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq",$cpufreq);
+exec("cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq|sort -nr|head -n1",$cpufreq);
 $cpufreq = $cpufreq[0] / 1000;
 // load of processor
 $getLoad = sys_getloadavg();

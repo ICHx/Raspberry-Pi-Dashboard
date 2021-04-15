@@ -9,7 +9,7 @@ return array (
   ),
   'general' =>
   array (
-    'pass' => '63a9f0ea7bb98050796b649e85481845',
+    'pass' => '827ccb0eea8a706c4c34a16891f84e7b',
     'initsetup' => '0',
   ),
 );
