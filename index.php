@@ -60,47 +60,8 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
         url('fonts/rubik-v12-latin-300.svg#Rubik') format('svg');
       /* Legacy iOS */
     }
-
-    body,
-    .mdtoast {
-      font-family: 'Rubik', sans-serif;
-    }
-
-    pre {
-      text-align: justify !important;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @media screen and (max-width: 530px) {
-      #notf {
-        display: block;
-      }
-
-      #dot {
-        display: none;
-      }
-    }
-
-    .preload-screen {
-      position: fixed;
-      left: 0px;
-      top: 0px;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      background: url(img/load.gif) center no-repeat #fff;
-    }
-
-    .doughnut-chart-container {
-      height: 360px;
-      width: 360px;
-      float: left;
-    }
   </style>
-
+  <link rel="stylesheet" href="index.css">
   <?php
   if ($auth) {
     $upt = new DateTime(shell_exec('uptime -s'));
@@ -120,15 +81,15 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
     $ds_rund = round($ds, 2);
 
     $p = $df / $ds * 100;
-    //
 
-    $current = exec("cat /sys/class/power_supply/battery/current_now");
-    $bstat = exec("cat /sys/class/power_supply/battery/status");
-    $spannung = exec("cat /sys/class/power_supply/battery/capacity");
+
 
     // $spannung = substr(exec("vcgencmd measure_volts core"), 5);
     // if (strpos($spannung, "failed") !== false) $spannung = $spannung . "<div class='alert alert-danger' role='alert'>Reading of core voltage failed. Please run<br><kbd>sudo usermod -aG video www-data</kbd><br>in a terminal to solve this problem.</div>";
   }
+  $current = exec("cat /sys/class/power_supply/battery/current_now");
+  $bstat = exec("cat /sys/class/power_supply/battery/status");
+  $bcap = exec("cat /sys/class/power_supply/battery/capacity");
   ?>
 
 </head>
@@ -142,7 +103,7 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
   <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark shadow-sm">
     <a class="navbar-brand" href="./">
       <img src="img/official_logo.svg" width="30" height="30" class="d-inline-block align-top" alt="RPi Logo">
-      Raspberry Pi Dashboard
+      Pi Dashboard
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -209,7 +170,7 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
           </div>
 
           <div class="card-body">
-            <p style="font-size: 20px" class="card-text text-muted"><?php echo "Battery: $spannung %"; ?></p>
+            <p style="font-size: 20px" class="card-text text-muted"><?php echo "Battery: $bcap %"; ?></p>
             <p style="font-size: 20px" class="card-text text-muted"><?php echo "Current: $current mAh"; ?></p>
             <p style="font-size: 13px" class="card-text text-muted"><?php echo "$bstat"; ?></p>
           </div>
@@ -311,7 +272,7 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
             <div class="card-body">
               <h5 class="card-title"><i class="bi bi-lightning"></i>&nbsp;Battery</h5>
               <!-- changed -->
-              <p style="font-size: 20px" class="card-text text-muted"><?php echo $spannung; ?></p>
+              <p style="font-size: 20px" class="card-text text-muted"><?php echo $bcap; ?></p>
               <p class="card-text"><small class="text-muted">Updated <span><?php echo date("H:i:s"); ?> (at page load)</span></small></p>
             </div>
           </div>
@@ -368,18 +329,21 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
           </div>
         </div>
       </div>
-      <div class="row pt-3">
+
+        <div class="row pt-3">
+
         <div class="col-sm-6 pt-1 pt-md-0">
           <div class="card text-center border-info">
-            <div class="card-header">Hostname</div>
+            <div class="card-header">Process</div>
             <div class="card-body">
               <?php print "<pre style='text-align: left!important;'>";
-              echo shell_exec("hostname ");
+              echo shell_exec("ps -o cmd,%mem,%cpu --sort=-%mem|uniq|head");
               print "</pre>"; ?>
               <p class="card-text"><small class="text-muted">Updated <span><?php echo date("H:i:s"); ?> (at page load)</span></small></p>
             </div>
           </div>
         </div>
+
         <div class="col-sm-6 pt-1 pt-md-0">
           <div class="card text-center border-info">
             <div class="card-header">Processor</div>
