@@ -42,8 +42,11 @@ if ($s > 0) {
   $uptime_string .= $s . $sw;
 }
 // CPU temperature
-exec("cat /sys/class/thermal/thermal_zone0/temp",$cputemp);
-$cputemp = $cputemp[0] / 1000;
+exec("bash /var/www/html/dashboard/getThermo.sh",$cputemp);
+$cputemp = $cputemp[0];
+// exec("cat /sys/class/thermal/thermal_zone0/temp",$cputemp);
+// $cputemp = $cputemp[0] / 1000;
+
 // CPU frequency
 exec("cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq|sort -nr|head -n1",$cpufreq);
 $cpufreq = $cpufreq[0] / 1000;

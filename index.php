@@ -122,8 +122,12 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
     $p = $df / $ds * 100;
     //
 
-    $spannung = substr(exec("vcgencmd measure_volts core"), 5);
-    if (strpos($spannung, "failed") !== false) $spannung = $spannung . "<div class='alert alert-danger' role='alert'>Reading of core voltage failed. Please run<br><kbd>sudo usermod -aG video www-data</kbd><br>in a terminal to solve this problem.</div>";
+    $current = exec("cat /sys/class/power_supply/battery/current_now");
+    $bstat = exec("cat /sys/class/power_supply/battery/status");
+    $spannung = exec("cat /sys/class/power_supply/battery/capacity");
+
+    // $spannung = substr(exec("vcgencmd measure_volts core"), 5);
+    // if (strpos($spannung, "failed") !== false) $spannung = $spannung . "<div class='alert alert-danger' role='alert'>Reading of core voltage failed. Please run<br><kbd>sudo usermod -aG video www-data</kbd><br>in a terminal to solve this problem.</div>";
   }
   ?>
 
@@ -148,6 +152,13 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a class="nav-link" href="backend/sys_infos.php?statemail" onclick="alert('Status Mail support will arrive soon!');return false;">Status Mail</a>
+        </li>
+        <li>
+          <div id="sysTitleRight">
+            <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-sm  btn-outline-primary mt-1"><i class="bi bi-power"></i>&nbsp;Power</button>&nbsp;
+
+            <button type="button" onclick="logout()" class="btn btn-sm btn-outline-warning mt-1"><i class="bi bi-arrow-right-square"></i>&nbsp;Logout</button>
+          </div>
         </li>
       </ul>
       <p style="color: white;line-height:15px;margin-bottom:0px"><b>Hostname:</b> <?php system("hostname"); ?> &#183; <b>Internal IP:</b> <?php echo $_SERVER["SERVER_ADDR"]; ?><br>
@@ -189,10 +200,18 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
       </div>
       <div class="col-sm-4 pt-1 pt-md-0">
         <div class="card shadow-sm">
-          <div class="card-header border-primary text-primary"><i class="bi bi-command"></i>&nbsp;System</div>
+
+          <div id="titleBar" class="card-header border-primary text-primary d-flex">
+            <div id="sysTitleLeft">
+              <i class="bi bi-command" id="sysTitle"></i>&nbsp;System
+            </div>
+
+          </div>
+
           <div class="card-body">
-            <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-outline-primary mt-1"><i class="bi bi-power"></i>&nbsp;Power</button>&nbsp;
-            <button type="button" onclick="logout()" class="btn btn-outline-warning mt-1"><i class="bi bi-arrow-right-square"></i>&nbsp;Logout</button>
+            <p style="font-size: 20px" class="card-text text-muted"><?php echo "Battery: $spannung %"; ?></p>
+            <p style="font-size: 20px" class="card-text text-muted"><?php echo "Current: $current mAh"; ?></p>
+            <p style="font-size: 13px" class="card-text text-muted"><?php echo "$bstat"; ?></p>
           </div>
         </div>
       </div>
@@ -290,7 +309,8 @@ $passVal = ($config->get("general.pass") !== '827ccb0eea8a706c4c34a16891f84e7b')
         <div class="col-sm-6 pt-1 pt-md-0">
           <div class="card text-center border-info">
             <div class="card-body">
-              <h5 class="card-title"><i class="bi bi-lightning"></i>&nbsp;Voltage</h5>
+              <h5 class="card-title"><i class="bi bi-lightning"></i>&nbsp;Battery</h5>
+              <!-- changed -->
               <p style="font-size: 20px" class="card-text text-muted"><?php echo $spannung; ?></p>
               <p class="card-text"><small class="text-muted">Updated <span><?php echo date("H:i:s"); ?> (at page load)</span></small></p>
             </div>
